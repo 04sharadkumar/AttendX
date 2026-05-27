@@ -14,15 +14,10 @@
     "allowSyntheticDefaultImports": true,
 
     "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true,
 
     "resolveJsonModule": true,
 
-    "types": ["node"],
-
-    "noImplicitAny": true,
-    "noUnusedLocals": false,
-    "noUnusedParameters": false
+    "types": ["node"]
   },
 
   "include": ["src/**/*"],
