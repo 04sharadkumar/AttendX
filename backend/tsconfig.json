@@ -1,8 +1,10 @@
 {
   "compilerOptions": {
     "target": "ES2020",
+
     "module": "NodeNext",
     "moduleResolution": "NodeNext",
+
     "rootDir": "./src",
     "outDir": "./dist",
 
@@ -14,9 +16,11 @@
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
 
-    "types": ["node"]
+    "resolveJsonModule": true,
+
+    "ignoreDeprecations": "6.0"
   },
 
   "include": ["src/**/*"],
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules", "dist"]
 }
