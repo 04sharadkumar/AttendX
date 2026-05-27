@@ -1,6 +1,6 @@
 import passport from "passport";
 import { Strategy as GoogleStrategy } from "passport-google-oauth20";
-import {pool} from "../config/db";
+import {pool} from "../config/db.js";
 
 passport.use(
   new GoogleStrategy(
@@ -24,6 +24,7 @@ passport.use(
           [email]
         );
 
+        
         let user = userResult.rows[0];
 
         if (!user) {
