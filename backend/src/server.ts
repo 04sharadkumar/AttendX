@@ -1,6 +1,7 @@
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
+import { Request, Response } from "express";
 
 import authRoutes from "./routes/auth.routes.js";
 import attendanceRoutes from "./routes/attendance.routes.js";
@@ -22,7 +23,9 @@ app.use(
 
 app.use(express.json());
 
-app.get("/", (req, res) => {
+
+app.get("/", (req: Request, res: Response) => {
+
   res.status(200).json({
     success: true,
     message: "Server is working ✅",
