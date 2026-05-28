@@ -1,11 +1,25 @@
 import { Request, Response } from "express";
 import { pool } from "../config/db.js";
 
-// GET logged-in/user profile
-export const getUserProfile = async (req: Request, res: Response) => {
+type AuthRequest = Request & {
+  user?: {
+    id: number;
+    email: string;
+  };
+};
+
+export const getUserProfile = async (
+  req: AuthRequest,
+  res: Response
+) => {
   try {
-    // Change this email later with logged-in user email from token/session
-    const email = "sharad@gmail.com";
+    const userId = req.user?.id;
+
+    if (!userId) {
+      return res.status(401).json({
+        message: "Unauthorized user",
+      });
+    }
 
     const result = await pool.query(
       `
@@ -24,9 +38,9 @@ export const getUserProfile = async (req: Request, res: Response) => {
         created_at,
         updated_at
       FROM users
-      WHERE email = $1
+      WHERE id = $1
       `,
-      [email]
+      [userId]
     );
 
     if (result.rows.length === 0) {
