@@ -1,9 +1,11 @@
-import pg from "pg";
+import { Pool } from "pg";
 import dotenv from "dotenv";
+import dns from "dns";
 
 dotenv.config();
 
-const { Pool } = pg;
+// ⭐ Force IPv4 globally
+dns.setDefaultResultOrder("ipv4first");
 
 export const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
@@ -11,4 +13,3 @@ export const pool = new Pool({
     rejectUnauthorized: false,
   },
 });
-
