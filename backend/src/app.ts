@@ -2,9 +2,9 @@ import express, { Request, Response } from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 
-import authRoutes from "./routes/auth.routes";
-import attendanceRoutes from "./routes/attendance.routes";
-import userRoutes from "./routes/user.routes";
+import authRoutes from "./routes/auth.routes.js";
+import attendanceRoutes from "./routes/attendance.routes.js";
+import userRoutes from "./routes/user.routes.js";
 
 dotenv.config();
 

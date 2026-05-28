@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { pool } from "../config/db";
+import { pool } from "../config/db.js";
 
 // GET logged-in/user profile
 export const getUserProfile = async (req: Request, res: Response) => {

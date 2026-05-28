@@ -7,7 +7,7 @@ import {
   getMonthlyAttendance,
   approveAttendance,
   getMonthlyStats,
-} from "../controllers/attendance.controller";
+} from "../controllers/attendance.controller.js";
 
 const router = express.Router();
 

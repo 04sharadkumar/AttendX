@@ -1,6 +1,6 @@
 import dotenv from "dotenv";
-import app from "./app";
-import { pool } from "./config/db";
+import app from "./app.js";
+import { pool } from "./config/db.js";
 
 dotenv.config();
 
@@ -21,7 +21,7 @@ async function startServer(): Promise<void> {
       err instanceof Error ? err.message : err
     );
 
-    
+
     process.exit(1);
   }
 }
