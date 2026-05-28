@@ -3,7 +3,7 @@ import {
   getUserProfile,
   getUserByEmail,
   updateUserProfile,
-} from "../controllers/user.controller.js";
+} from "../controllers/user.controller";
 
 const router = express.Router();
 
