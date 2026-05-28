@@ -21,6 +21,7 @@ async function startServer(): Promise<void> {
       err instanceof Error ? err.message : err
     );
 
+    
     process.exit(1);
   }
 }
