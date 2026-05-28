@@ -59,53 +59,19 @@ export const getUserProfile = async (
   }
 };
 
-// GET user by email
-export const getUserByEmail = async (req: Request, res: Response) => {
+// UPDATE user profile
+export const updateUserProfile = async (
+  req: AuthRequest,
+  res: Response
+) => {
   try {
-    const { email } = req.params;
+    const userId = req.user?.id;
 
-    const result = await pool.query(
-      `
-      SELECT 
-        id,
-        google_id,
-        name,
-        email,
-        profile_pic,
-        phone,
-        location,
-        department,
-        shift_time,
-        auth_provider,
-        email_verified,
-        created_at,
-        updated_at
-      FROM users
-      WHERE email = $1
-      `,
-      [email]
-    );
-
-    if (result.rows.length === 0) {
-      return res.status(404).json({
-        message: "User not found",
+    if (!userId) {
+      return res.status(401).json({
+        message: "Unauthorized user",
       });
     }
-
-    return res.status(200).json(result.rows[0]);
-  } catch (error) {
-    console.log("Get User Error:", error);
-
-    return res.status(500).json({
-      message: "Server error",
-    });
-  }
-};
-
-// UPDATE user profile
-export const updateUserProfile = async (req: Request, res: Response) => {
-  try {
-    const { email } = req.params;
 
     const {
       name,
@@ -127,21 +93,8 @@ export const updateUserProfile = async (req: Request, res: Response) => {
         shift_time = COALESCE($5, shift_time),
         profile_pic = COALESCE($6, profile_pic),
         updated_at = CURRENT_TIMESTAMP
-      WHERE email = $7
-      RETURNING 
-        id,
-        google_id,
-        name,
-        email,
-        profile_pic,
-        phone,
-        location,
-        department,
-        shift_time,
-        auth_provider,
-        email_verified,
-        created_at,
-        updated_at
+      WHERE id = $7
+      RETURNING *
       `,
       [
         name,
@@ -150,7 +103,7 @@ export const updateUserProfile = async (req: Request, res: Response) => {
         department,
         shift_time,
         profile_pic,
-        email,
+        userId,
       ]
     );
 

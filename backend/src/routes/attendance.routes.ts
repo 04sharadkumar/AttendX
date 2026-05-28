@@ -1,28 +1,30 @@
 import express from "express";
+import { authorize } from "../middleware/auth.middleware.js";
+
 import {
   checkIn,
   checkOut,
   getTodayAttendance,
-  getUserAttendance,
   getMonthlyAttendance,
-  approveAttendance,
   getMonthlyStats,
+  approveAttendance,
+  rejectAttendance,
 } from "../controllers/attendance.controller.js";
 
 const router = express.Router();
 
-router.post("/check-in", checkIn);
+router.get("/today", authorize, getTodayAttendance);
 
-router.put("/check-out", checkOut);
+router.post("/check-in", authorize, checkIn);
 
-router.get("/today/:user_id", getTodayAttendance);
+router.put("/check-out", authorize, checkOut);
 
-router.get("/user/:user_id", getUserAttendance);
+router.get("/month", authorize, getMonthlyAttendance);
 
-router.get("/month/:user_id", getMonthlyAttendance);
+router.get("/stats", authorize, getMonthlyStats);
 
-router.put("/approve/:attendance_id", approveAttendance);
+router.put("/approve/:attendance_id", authorize, approveAttendance);
 
-router.get("/stats/:user_id", getMonthlyStats);
+router.put("/reject/:attendance_id", authorize, rejectAttendance);
 
 export default router;
