@@ -43,6 +43,7 @@ export const registerUser = async (req: Request, res: Response) => {
         id,
         name,
         email,
+        role,
         profile_pic,
         phone,
         location,
@@ -57,7 +58,7 @@ export const registerUser = async (req: Request, res: Response) => {
     );
 
     const user = result.rows[0];
-    const token = createToken(user.id, user.email);
+    const token = createToken(user.id, user.email, user.role);
 
     return res.status(201).json({
       message: "Account created successfully",
@@ -112,7 +113,7 @@ export const loginUser = async (req: Request, res: Response) => {
       });
     }
 
-    const token = createToken(user.id, user.email);
+    const token = createToken(user.id, user.email, user.role);
 
     delete user.password;
 

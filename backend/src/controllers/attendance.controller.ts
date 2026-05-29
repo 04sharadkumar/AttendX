@@ -410,35 +410,3 @@ export const rejectAttendance = async (
   }
 };
 
-
-// Get attendance history for a user
-
-
-export const getUserAttendance = async (req: Request, res: Response) => {
-  try {
-    const { user_id } = req.params;
-
-    const result = await pool.query(
-      `
-      SELECT *
-      FROM attendance_logs
-      WHERE user_id = $1
-      ORDER BY attendance_date DESC, created_at DESC
-      `,
-      [user_id]
-    );
-
-    return res.status(200).json({
-      success: true,
-      data: result.rows,
-    });
-  } catch (error) {
-    console.log("Get attendance error:", error);
-
-    return res.status(500).json({
-      success: false,
-      message: "Failed to get attendance",
-    });
-  }
-};
-

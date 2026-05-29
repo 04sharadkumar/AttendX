@@ -28,6 +28,7 @@ export const getUserProfile = async (
         google_id,
         name,
         email,
+        role,
         profile_pic,
         phone,
         location,

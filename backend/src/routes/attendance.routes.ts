@@ -7,8 +7,6 @@ import {
   getTodayAttendance,
   getMonthlyAttendance,
   getMonthlyStats,
-  approveAttendance,
-  rejectAttendance,
 } from "../controllers/attendance.controller.js";
 
 const router = express.Router();
@@ -23,8 +21,6 @@ router.get("/month", authorize, getMonthlyAttendance);
 
 router.get("/stats", authorize, getMonthlyStats);
 
-router.put("/approve/:attendance_id", authorize, approveAttendance);
 
-router.put("/reject/:attendance_id", authorize, rejectAttendance);
 
 export default router;
