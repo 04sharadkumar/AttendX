@@ -410,3 +410,121 @@ export const rejectAttendance = async (
   }
 };
 
+export const getWorkHours = async (req: AuthRequest, res: Response) => {
+  try {
+    const userId = req.user?.id;
+    const month = Number(req.query.month);
+    const year = Number(req.query.year);
+
+    if (!userId) {
+      return res.status(401).json({
+        success: false,
+        message: "Unauthorized user",
+      });
+    }
+
+    if (!month || !year) {
+      return res.status(400).json({
+        success: false,
+        message: "Month and year are required",
+      });
+    }
+
+    const result = await pool.query(
+      `
+      SELECT
+        id,
+        user_id,
+        attendance_date,
+        check_in_time,
+        check_out_time,
+        COALESCE(total_minutes, 0) AS total_minutes,
+        status
+      FROM attendance_logs
+      WHERE user_id = $1
+      AND EXTRACT(MONTH FROM attendance_date) = $2
+      AND EXTRACT(YEAR FROM attendance_date) = $3
+      ORDER BY attendance_date DESC
+      `,
+      [userId, month, year]
+    );
+
+    return res.status(200).json({
+      success: true,
+      message: "Work hours fetched successfully",
+      data: result.rows,
+    });
+  } catch (error) {
+    console.log("Get work hours error:", error);
+
+    return res.status(500).json({
+      success: false,
+      message: "Internal server error",
+    });
+  }
+};
+
+export const getWorkHoursSummary = async (req: AuthRequest, res: Response) => {
+  try {
+    const userId = req.user?.id;
+    const month = Number(req.query.month);
+    const year = Number(req.query.year);
+
+    if (!userId) {
+      return res.status(401).json({
+        success: false,
+        message: "Unauthorized user",
+      });
+    }
+
+    if (!month || !year) {
+      return res.status(400).json({
+        success: false,
+        message: "Month and year are required",
+      });
+    }
+
+    const result = await pool.query(
+      `
+      SELECT
+        COUNT(*) AS total_days,
+
+        COALESCE(SUM(total_minutes), 0) AS total_minutes,
+
+        COALESCE(SUM(
+          CASE WHEN status = 'APPROVED'
+          THEN total_minutes ELSE 0 END
+        ), 0) AS approved_minutes,
+
+        COALESCE(SUM(
+          CASE WHEN status = 'PENDING'
+          THEN total_minutes ELSE 0 END
+        ), 0) AS pending_minutes,
+
+        COALESCE(SUM(
+          CASE WHEN status = 'REJECTED'
+          THEN total_minutes ELSE 0 END
+        ), 0) AS rejected_minutes
+
+      FROM attendance_logs
+      WHERE user_id = $1
+      AND EXTRACT(MONTH FROM attendance_date) = $2
+      AND EXTRACT(YEAR FROM attendance_date) = $3
+      `,
+      [userId, month, year]
+    );
+
+    return res.status(200).json({
+      success: true,
+      message: "Work hours summary fetched successfully",
+      data: result.rows[0],
+    });
+  } catch (error) {
+    console.log("Get work hours summary error:", error);
+
+    return res.status(500).json({
+      success: false,
+      message: "Internal server error",
+    });
+  }
+};
